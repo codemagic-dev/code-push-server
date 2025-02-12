@@ -49,6 +49,10 @@ workflows:
       vars:
         ENV: production
         SERVER: codepush-docker
+      groups:
+        - docker
+        - azure
+        - redis
     scripts:
       - name: Get deployment target
         script: |
