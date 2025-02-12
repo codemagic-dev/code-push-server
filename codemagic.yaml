@@ -44,6 +44,8 @@ definitions:
           --env REDIS_HOST="redis-1.internal.codemagic.io" \
           --env REDIS_PORT=6379 \
           --env REDIS_KEY=$REDIS_KEY \
+          --env LOGGING=true \
+          --name code-push-server \
           -p 0.0.0.0:3000:3000 \
           gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
         EOF"
