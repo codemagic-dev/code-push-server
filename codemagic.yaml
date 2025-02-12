@@ -19,6 +19,13 @@ definitions:
           -f Dockerfile .
         docker tag code-push-server gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
         docker push gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
+    - &save_gce_deployment_ssh_key
+      name: Save GCE deployment SSH key
+      script: |
+        set -e
+        echo "${GCE_DEPLOYMENT_SSH_KEY:?}" > ~/.ssh/google_compute_engine
+        chmod 0400 ~/.ssh/google_compute_engine
+        ssh-keygen -y -f ~/.ssh/google_compute_engine > ~/.ssh/google_compute_engine.pub
     - &deploy
       name: Deploy
       script: |
@@ -50,6 +57,7 @@ workflows:
         ENV: production
         SERVER: codepush-docker
       groups:
+        - production
         - docker
         - azure
         - redis
@@ -61,4 +69,5 @@ workflows:
           echo "SERVER=ubuntu@$SERVER" >> $CM_ENV
       - *authenticate
       - *build
+      - *save_gce_deployment_ssh_key
       - *deploy
