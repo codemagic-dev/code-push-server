@@ -46,7 +46,7 @@ definitions:
           --env REDIS_KEY=$REDIS_KEY \
           --env LOGGING=true \
           --name code-push-server \
-          -p 0.0.0.0:3000:3000 \
+          -p 0.0.0.0:3001:3000 \
           gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
         EOF"
 
@@ -57,7 +57,7 @@ workflows:
     environment:
       vars:
         ENV: production
-        SERVER: codepush-docker
+        SERVER: codepush
       groups:
         - production
         - docker
