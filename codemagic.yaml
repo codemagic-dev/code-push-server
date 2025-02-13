@@ -39,7 +39,7 @@ definitions:
         docker run -d \
           --env AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
           --env AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
-          --env SERVER_URL="https://codepush-docker.codemagic.io" \
+          --env SERVER_URL="https://codepush.codemagic.io" \
           --env ENABLE_ACCOUNT_REGISTRATION=false \
           --env REDIS_HOST="redis-1.internal.codemagic.io" \
           --env REDIS_PORT=6379 \
@@ -53,7 +53,7 @@ definitions:
 workflows:
   production:
     name: Deploy to production
-    instance_type: linux
+    instance_type: linux_x2
     environment:
       vars:
         ENV: production
