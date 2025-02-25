@@ -126,10 +126,10 @@ export class RedisManager {
 
       this._setupOpsClientPromise = this._promisifiedOpsClient
         .select(RedisManager.OPS_DB)
-        .then(() => this._promisifiedOpsClient.set("health", "health-ops"));
+        .then(() => this._promisifiedOpsClient.set("health", "health"));
       this._setupMetricsClientPromise = this._promisifiedMetricsClient
         .select(RedisManager.METRICS_DB)
-        .then(() => this._promisifiedMetricsClient.set("health", "health-metrics"));
+        .then(() => this._promisifiedMetricsClient.set("health", "health"));
     } else {
       console.warn("No REDIS_HOST or REDIS_PORT environment variable configured.");
     }
