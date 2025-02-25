@@ -44,6 +44,8 @@ definitions:
           --env REDIS_HOST="redis-1.internal.codemagic.io" \
           --env REDIS_PORT=6379 \
           --env REDIS_KEY=$REDIS_KEY \
+          --env REDIS_OPS_DB=4 \
+          --env REDIS_METRICS_DB=5 \
           --env LOGGING=true \
           --name code-push-server \
           -p 0.0.0.0:3001:3000 \

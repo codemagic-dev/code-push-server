@@ -89,13 +89,16 @@ class PromisifiedRedisClient {
 
 export class RedisManager {
   private static DEFAULT_EXPIRY: number = 3600; // one hour, specified in seconds
+  private static OPS_DB: number = 0;
   private static METRICS_DB: number = 1;
+
 
   private _opsClient: redis.RedisClient;
   private _promisifiedOpsClient: PromisifiedRedisClient;
   private _metricsClient: redis.RedisClient;
   private _promisifiedMetricsClient: PromisifiedRedisClient;
   private _setupMetricsClientPromise: Promise<void>;
+  private _setupOpsClientPromise: Promise<void>;
 
   constructor() {
     if (process.env.REDIS_HOST && process.env.REDIS_PORT) {
@@ -114,9 +117,19 @@ export class RedisManager {
 
       this._promisifiedOpsClient = new PromisifiedRedisClient(this._opsClient);
       this._promisifiedMetricsClient = new PromisifiedRedisClient(this._metricsClient);
+      if (process.env.REDIS_OPS_DB) {
+          RedisManager.OPS_DB = parseInt(process.env.REDIS_OPS_DB);
+      }
+      if (process.env.REDIS_METRICS_DB) {
+          RedisManager.METRICS_DB = parseInt(process.env.REDIS_METRICS_DB);
+      }
+
+      this._setupOpsClientPromise = this._promisifiedOpsClient
+        .select(RedisManager.OPS_DB)
+        .then(() => this._promisifiedOpsClient.set("health", "health-ops"));
       this._setupMetricsClientPromise = this._promisifiedMetricsClient
         .select(RedisManager.METRICS_DB)
-        .then(() => this._promisifiedMetricsClient.set("health", "health"));
+        .then(() => this._promisifiedMetricsClient.set("health", "health-metrics"));
     } else {
       console.warn("No REDIS_HOST or REDIS_PORT environment variable configured.");
     }
