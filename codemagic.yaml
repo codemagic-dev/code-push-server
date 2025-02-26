@@ -48,7 +48,7 @@ definitions:
           --env REDIS_METRICS_DB=1 \
           --env LOGGING=true \
           --name code-push-server \
-          -p 0.0.0.0:3001:3000 \
+          -p 127.0.0.1:3001:3000 \
           --log-driver local \
           --log-opt max-file=$DOCKER_LOG_OPT_MAX_FILE \
           gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
@@ -67,7 +67,7 @@ definitions:
           --env REDIS_METRICS_DB=1 \
           --env LOGGING=true \
           --name code-push-server-2 \
-          -p 0.0.0.0:3002:3000 \
+          -p 127.0.0.1:3002:3000 \
           --log-driver local \
           --log-opt max-file=$DOCKER_LOG_OPT_MAX_FILE \
           gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
