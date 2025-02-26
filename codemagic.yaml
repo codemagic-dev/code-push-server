@@ -52,6 +52,25 @@ definitions:
           --log-driver local \
           --log-opt max-file=$DOCKER_LOG_OPT_MAX_FILE \
           gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
+        sleep 120  # we agreed to have a delay between container deployments to allow smooth switching
+        docker stop code-push-server-2 || true
+        docker rm code-push-server-2 || true
+        docker run -d \
+          --env AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
+          --env AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
+          --env SERVER_URL="https://codepush.codemagic.io" \
+          --env ENABLE_ACCOUNT_REGISTRATION=false \
+          --env REDIS_HOST="redis-1.internal.codemagic.io" \
+          --env REDIS_PORT=6379 \
+          --env REDIS_KEY=$REDIS_KEY \
+          --env REDIS_OPS_DB=2 \
+          --env REDIS_METRICS_DB=1 \
+          --env LOGGING=true \
+          --name code-push-server-2 \
+          -p 0.0.0.0:3002:3000 \
+          --log-driver local \
+          --log-opt max-file=$DOCKER_LOG_OPT_MAX_FILE \
+          gcr.io/$GCLOUD_PROJECT_NAME/$ENV/code-push-server
         EOF"
 
 workflows:
